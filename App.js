@@ -13,53 +13,18 @@
  */
 
  import React, {useState, useEffect, useRef} from 'react';
-
- const TIMER = 5
+ import useGameLogic from './Hooks/useGameLogic'
  
  function App () {
-   const [start, setStart] = useState(false)
-   const [textInput, setTextInput] = useState('');
-   const [count, setCount] = useState(0)
-   const [timeRemaining, setTimeRemaining] = useState(TIMER);
-   const textAreaRef = useRef();
-   let timeoutID;
-   //handle updates to the input box
-   const handleTextInput = (event) => {
-     const {value} = event.target;
-     setTextInput(value)
-   }
-
-   useEffect(()=>{
-    if(timeRemaining > 0 && start){
-      textAreaRef.current.focus()
-      timeoutID = setTimeout(() => {
-        setTimeRemaining(time => time -1)
-      }, 1000)
-    }else if(timeRemaining === 0){
-      setStart(false)
-    }
-    else{
-      return () => clearTimeout(timeoutID)
-    }
-   },[timeRemaining, start])
-  //  useEffect to count words everything textarea updates
-   useEffect(()=> {
-     setCount(calculateCount())
-   },[textInput])
-
-  const calculateCount = () => {
-    return textInput.trim()
-      .split(' ')
-      .filter(word => word !== '')
-      .length 
-  }
-
-  const handleClick = () => {
-    setCount(0);
-    setTimeRemaining(TIMER);
-    setTextInput('');
-    setStart(true);
-  }
+   const {
+     textAreaRef,
+     handleTextInput,
+     handleClick, 
+     count, 
+     timeRemaining,
+     start,
+     textInput
+    } = useGameLogic()
 
   return (
     <div>

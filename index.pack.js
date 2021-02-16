@@ -504,91 +504,39 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * Challenge: build the basic structure of our game
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 1. <h1> title at the top
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 2. <textarea> for the box to type in 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          *      (tip: React normalizes <textarea /> to be more like <input />, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          *      so it can be used as a self-closing element and uses the `value` property
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          *      to set its contents)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 3. <h4> ti display the amount of time remaining
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 4. <button> to start the game
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 5. Another <h1> to display the word count
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
-
 var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _useGameLogic2 = __webpack_require__(18);
+
+var _useGameLogic3 = _interopRequireDefault(_useGameLogic2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var TIMER = 5;
+/**
+ * Challenge: build the basic structure of our game
+ * 
+ * 1. <h1> title at the top
+ * 2. <textarea> for the box to type in 
+ *      (tip: React normalizes <textarea /> to be more like <input />, 
+ *      so it can be used as a self-closing element and uses the `value` property
+ *      to set its contents)
+ * 3. <h4> ti display the amount of time remaining
+ * 4. <button> to start the game
+ * 5. Another <h1> to display the word count
+ * 
+ */
 
 function App() {
-  var _useState = (0, _react.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      start = _useState2[0],
-      setStart = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(''),
-      _useState4 = _slicedToArray(_useState3, 2),
-      textInput = _useState4[0],
-      setTextInput = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(0),
-      _useState6 = _slicedToArray(_useState5, 2),
-      count = _useState6[0],
-      setCount = _useState6[1];
-
-  var _useState7 = (0, _react.useState)(TIMER),
-      _useState8 = _slicedToArray(_useState7, 2),
-      timeRemaining = _useState8[0],
-      setTimeRemaining = _useState8[1];
-
-  var textAreaRef = (0, _react.useRef)();
-  var timeoutID = void 0;
-  //handle updates to the input box
-  var handleTextInput = function handleTextInput(event) {
-    var value = event.target.value;
-
-    setTextInput(value);
-  };
-
-  (0, _react.useEffect)(function () {
-    if (timeRemaining > 0 && start) {
-      textAreaRef.current.focus();
-      timeoutID = setTimeout(function () {
-        setTimeRemaining(function (time) {
-          return time - 1;
-        });
-      }, 1000);
-    } else if (timeRemaining === 0) {
-      setStart(false);
-    } else {
-      return function () {
-        return clearTimeout(timeoutID);
-      };
-    }
-  }, [timeRemaining, start]);
-  //  useEffect to count words everything textarea updates
-  (0, _react.useEffect)(function () {
-    setCount(calculateCount());
-  }, [textInput]);
-
-  var calculateCount = function calculateCount() {
-    return textInput.trim().split(' ').filter(function (word) {
-      return word !== '';
-    }).length;
-  };
-
-  var handleClick = function handleClick() {
-    setCount(0);
-    setTimeRemaining(TIMER);
-    setTextInput('');
-    setStart(true);
-  };
+  var _useGameLogic = (0, _useGameLogic3.default)(),
+      textAreaRef = _useGameLogic.textAreaRef,
+      handleTextInput = _useGameLogic.handleTextInput,
+      handleClick = _useGameLogic.handleClick,
+      count = _useGameLogic.count,
+      timeRemaining = _useGameLogic.timeRemaining,
+      start = _useGameLogic.start,
+      textInput = _useGameLogic.textInput;
 
   return _react2.default.createElement(
     'div',
@@ -32843,6 +32791,101 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _react = __webpack_require__(2);
+
+var TIMER = 5;
+var useGameLogic = function useGameLogic() {
+  var _useState = (0, _react.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      start = _useState2[0],
+      setStart = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      textInput = _useState4[0],
+      setTextInput = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(0),
+      _useState6 = _slicedToArray(_useState5, 2),
+      count = _useState6[0],
+      setCount = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(TIMER),
+      _useState8 = _slicedToArray(_useState7, 2),
+      timeRemaining = _useState8[0],
+      setTimeRemaining = _useState8[1];
+
+  var textAreaRef = (0, _react.useRef)();
+  var timeoutID = void 0;
+  //handle updates to the input box
+  var handleTextInput = function handleTextInput(event) {
+    var value = event.target.value;
+
+    setTextInput(value);
+  };
+
+  (0, _react.useEffect)(function () {
+    if (timeRemaining > 0 && start) {
+      textAreaRef.current.focus();
+      timeoutID = setTimeout(function () {
+        setTimeRemaining(function (time) {
+          return time - 1;
+        });
+      }, 1000);
+    } else if (timeRemaining === 0) {
+      setStart(false);
+    } else {
+      return function () {
+        return clearTimeout(timeoutID);
+      };
+    }
+  }, [timeRemaining, start]);
+  //  useEffect to count words everything textarea updates
+  (0, _react.useEffect)(function () {
+    setCount(calculateCount());
+  }, [textInput]);
+
+  var calculateCount = function calculateCount() {
+    return textInput.trim().split(' ').filter(function (word) {
+      return word !== '';
+    }).length;
+  };
+
+  var handleClick = function handleClick() {
+    setCount(0);
+    setTimeRemaining(TIMER);
+    setTextInput('');
+    setStart(true);
+  };
+  return { textAreaRef: textAreaRef, handleTextInput: handleTextInput, handleClick: handleClick, count: count, timeRemaining: timeRemaining, start: start, textInput: textInput };
+};
+exports.default = useGameLogic;
+
+/**
+ *     <div>
+      <h1>Speed Typer</h1>
+
+      <textarea ref={textAreaRef} disabled={!start} value={textInput} onChange={handleTextInput}/> 
+      <h4>Time Remaining: {timeRemaining} </h4>
+      <button disabled={start} onClick={handleClick}> Start </button>
+      <h1>Word count: {count}</h1>
+
+    </div>
+ * */
 
 /***/ })
 /******/ ]);

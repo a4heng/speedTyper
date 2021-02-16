@@ -9,15 +9,19 @@
  * 3. <h4> ti display the amount of time remaining
  * 4. <button> to start the game
  * 5. Another <h1> to display the word count
+ * 
  */
 
- import React, {useState, useEffect} from 'react';
+ import React, {useState, useEffect, useRef} from 'react';
 
+ const TIMER = 5
+ 
  function App () {
    const [start, setStart] = useState(false)
    const [textInput, setTextInput] = useState('');
    const [count, setCount] = useState(0)
-   const [timeRemaining, setTimeRemaining] = useState(10);
+   const [timeRemaining, setTimeRemaining] = useState(TIMER);
+   const textAreaRef = useRef();
    let timeoutID;
    //handle updates to the input box
    const handleTextInput = (event) => {
@@ -27,10 +31,14 @@
 
    useEffect(()=>{
     if(timeRemaining > 0 && start){
+      textAreaRef.current.focus()
       timeoutID = setTimeout(() => {
         setTimeRemaining(time => time -1)
       }, 1000)
-    }else{
+    }else if(timeRemaining === 0){
+      setStart(false)
+    }
+    else{
       return () => clearTimeout(timeoutID)
     }
    },[timeRemaining, start])
@@ -46,14 +54,20 @@
       .length 
   }
 
-   console.log(textInput)
+  const handleClick = () => {
+    setCount(0);
+    setTimeRemaining(TIMER);
+    setTextInput('');
+    setStart(true);
+  }
+
   return (
     <div>
       <h1>Speed Typer</h1>
 
-      <textarea disabled={!start} value={textInput} onChange={handleTextInput}/> 
+      <textarea ref={textAreaRef} disabled={!start} value={textInput} onChange={handleTextInput}/> 
       <h4>Time Remaining: {timeRemaining} </h4>
-      <button disabled={start} onClick={()=>setStart(prev=> !prev)}> Start </button>
+      <button disabled={start} onClick={handleClick}> Start </button>
       <h1>Word count: {count}</h1>
 
     </div>

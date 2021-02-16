@@ -515,6 +515,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * 3. <h4> ti display the amount of time remaining
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * 4. <button> to start the game
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * 5. Another <h1> to display the word count
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           */
 
 var _react = __webpack_require__(2);
@@ -522,6 +523,8 @@ var _react = __webpack_require__(2);
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var TIMER = 5;
 
 function App() {
   var _useState = (0, _react.useState)(false),
@@ -539,11 +542,12 @@ function App() {
       count = _useState6[0],
       setCount = _useState6[1];
 
-  var _useState7 = (0, _react.useState)(10),
+  var _useState7 = (0, _react.useState)(TIMER),
       _useState8 = _slicedToArray(_useState7, 2),
       timeRemaining = _useState8[0],
       setTimeRemaining = _useState8[1];
 
+  var textAreaRef = (0, _react.useRef)();
   var timeoutID = void 0;
   //handle updates to the input box
   var handleTextInput = function handleTextInput(event) {
@@ -554,11 +558,14 @@ function App() {
 
   (0, _react.useEffect)(function () {
     if (timeRemaining > 0 && start) {
+      textAreaRef.current.focus();
       timeoutID = setTimeout(function () {
         setTimeRemaining(function (time) {
           return time - 1;
         });
       }, 1000);
+    } else if (timeRemaining === 0) {
+      setStart(false);
     } else {
       return function () {
         return clearTimeout(timeoutID);
@@ -576,7 +583,13 @@ function App() {
     }).length;
   };
 
-  console.log(textInput);
+  var handleClick = function handleClick() {
+    setCount(0);
+    setTimeRemaining(TIMER);
+    setTextInput('');
+    setStart(true);
+  };
+
   return _react2.default.createElement(
     'div',
     null,
@@ -585,7 +598,7 @@ function App() {
       null,
       'Speed Typer'
     ),
-    _react2.default.createElement('textarea', { disabled: !start, value: textInput, onChange: handleTextInput }),
+    _react2.default.createElement('textarea', { ref: textAreaRef, disabled: !start, value: textInput, onChange: handleTextInput }),
     _react2.default.createElement(
       'h4',
       null,
@@ -595,11 +608,7 @@ function App() {
     ),
     _react2.default.createElement(
       'button',
-      { disabled: start, onClick: function onClick() {
-          return setStart(function (prev) {
-            return !prev;
-          });
-        } },
+      { disabled: start, onClick: handleClick },
       ' Start '
     ),
     _react2.default.createElement(
